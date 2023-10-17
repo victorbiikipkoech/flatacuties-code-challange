@@ -1,1 +1,1 @@
-# flatacuties-code-challange
+# FLATACUTIES CODE CHALLAGE
