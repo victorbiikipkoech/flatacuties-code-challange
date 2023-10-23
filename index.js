@@ -1,82 +1,86 @@
-// Define a variable to keep track of the total votes
-let totalVotes = 0;
-
-function fetchAndDisplayCharacters() {
+// index.js
+function fetchCharactersAndDisplay() {
   const url = 'http://localhost:3000/characters';
 
   fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Display the names, images, and vote buttons on the HTML page
-      displayCharacterData(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
+          const characterList = document.getElementById('character-list');
 
-function displayCharacterData(characters) {
-  const characterList = document.getElementById('character-list');
-  const characterImage = document.getElementById('character-image-element');
-  const totalVotesButton = document.getElementById('total-votes-button');
-  const totalVotesCount = document.getElementById('total-votes-count');
+          // Clear any existing content
+          characterList.innerHTML = '';
 
-  characterList.innerHTML = ''; // Clear previous content
+          // Create a reset button to reset all votes
+          const resetButton = document.createElement('button');
+          resetButton.textContent = 'Reset Votes';
+          resetButton.className = 'reset-button';
 
-  characters.forEach(character => {
-    const listItem = document.createElement('li');
-    
-    // Create a element for the character name
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = character.name;
+          const charactersData = [];
 
-    // Attach a click event to the name to display the character image
-    nameSpan.addEventListener('click', () => {
-      displayCharacterImage(character.image);
-    });
+          resetButton.addEventListener('click', () => {
+              charactersData.forEach(character => {
+                  character.voteCount = 0;
+                  const voteCountElement = character.liElement.querySelector('.vote-count');
+                  voteCountElement.textContent = `Votes: ${character.voteCount}`;
+              });
+          });
 
-    // Create a vote button
-    const voteButton = document.createElement('button');
-    voteButton.textContent = 'Vote';
-    voteButton.addEventListener('click', () => {
-      // Increment the totalVotes variable and update the display
-      totalVotes++;
-      totalVotesCount.textContent = 'Total Votes: ' + totalVotes;
-    });
+          characterList.appendChild(resetButton);
 
-    listItem.appendChild(nameSpan);
-    listItem.appendChild(voteButton);
-    characterList.appendChild(listItem);
-  });
+          // Loop through the characters and add their names, vote buttons, vote counts, and images to the webpage
+          data.forEach(character => {
+              const characterName = document.createElement('li');
+              characterName.textContent = character.name;
 
-  // Event listener for the "Total Votes" button
-  totalVotesButton.addEventListener('click', () => {
-    totalVotesCount.textContent = 'Total Votes: ' + totalVotes;
-  });
+              const voteButton = document.createElement('button');
+              voteButton.textContent = 'Vote';
+              voteButton.className = 'vote-button';
+
+              let voteCount = 0;
+              const voteCountElement = document.createElement('span');
+              voteCountElement.className = 'vote-count';
+              voteCountElement.textContent = `Votes: ${voteCount}`;
+
+              characterName.appendChild(voteButton);
+              characterName.appendChild(voteCountElement);
+
+              voteButton.addEventListener('click', () => {
+                  voteCount++;
+                  voteCountElement.textContent = `Votes: ${voteCount}`;
+              });
+
+              characterName.addEventListener('click', () => {
+                  // Display the character's image when the name is clicked
+                  displayCharacterImage(character.image);
+              });
+
+              charactersData.push({
+                  name: character.name,
+                  image: character.image,
+                  voteCount: 0,
+                  liElement: characterName
+              });
+
+              characterList.appendChild(characterName);
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching data:', error);
+      });
 }
 
 function displayCharacterImage(imageUrl) {
-  const characterImage = document.getElementById('character-image-element');
-  characterImage.src = imageUrl;
+  const characterImage = document.getElementById('character-image');
+  characterImage.innerHTML = ''; // Clear any existing content
+  const img = document.createElement('img');
+  img.src = imageUrl;
+  characterImage.appendChild(img);
 }
 
-
-
-function resetVotes() {
-  totalVotes = 0;
-  const totalVotesCount = document.getElementById('total-votes-count');
-  totalVotesCount.textContent = 'Total Votes: ' + totalVotes;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const resetVotesButton = document.getElementById('reset-votes-button');
-  resetVotesButton.addEventListener('click', resetVotes);
-
-  // Call the function to fetch and display character data
-  fetchAndDisplayCharacters();
-});
+// Call the function to fetch and display character names when the page loads
+fetchCharactersAndDisplay();
