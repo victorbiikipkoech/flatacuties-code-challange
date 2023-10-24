@@ -1,52 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Character Names</title>
-    <style>
-        /* Add some basic styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            padding: 5px;
-        }
-        .vote-button {
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            margin-left: 10px;
-        }
-        .reset-button {
-            cursor: pointer;
-            background-color: #ff0000;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Voting</title>
 </head>
 <body>
-    <h1>Character Names</h1>
-    <ul id="character-list">
-        <!-- Character names, vote buttons, vote counts, and reset button will be displayed here -->
-    </ul>
-    <div id="character-image">
-        <!-- Character image will be displayed here -->
+    <h1>Character Voting</h1>
+    <div id="character-list">
+        <!-- Character data will be displayed here -->
     </div>
+    
+    <div>
+        <label for="image-url-input">Image URL:</label>
+        <input type="text" id="image-url-input" placeholder="Enter Image URL">
+        
+    </div>
+    
     <script src="index.js"></script>
 </body>
 </html>
+
+
 
